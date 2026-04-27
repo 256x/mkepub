@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/mattn/go-runewidth"
 	"mkepub/assets"
 	"mkepub/internal/aozora"
 	"mkepub/internal/catalog"
@@ -18,6 +19,8 @@ import (
 )
 
 func main() {
+	runewidth.DefaultCondition.EastAsianWidth = true
+
 	cfg, err := config.Load()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "config error: %v\n", err)

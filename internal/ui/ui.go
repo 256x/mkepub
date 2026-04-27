@@ -430,8 +430,8 @@ func (m Model) viewAuthor() string {
 	}
 
 	maxNameWidth := 0
-	for i := start; i < end; i++ {
-		if w := runewidth.StringWidth(m.filtered[i].Name()); w > maxNameWidth {
+	for _, a := range m.filtered {
+		if w := runewidth.StringWidth(a.Name()); w > maxNameWidth {
 			maxNameWidth = w
 		}
 	}
@@ -483,11 +483,19 @@ func (m Model) viewWork() string {
 		if m.epubExists(w) {
 			converted = styleDim.Render(" ✓")
 		}
+		var kanaLabel string
+		if w.IsNewKana() {
+			kanaLabel = styleSelect.Render("新仮名")
+		} else if w.CharUsage != "" {
+			kanaLabel = styleDim.Render("旧仮名")
+		} else {
+			kanaLabel = "      "
+		}
 		line := fmt.Sprintf("%s %s  %4s  %s%s",
 			check,
 			truncate(w.DisplayTitle(), 36),
 			w.PublishedYear,
-			styleDim.Render(w.NDC),
+			kanaLabel,
 			converted,
 		)
 		if i == m.workCursor {

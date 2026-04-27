@@ -15,10 +15,15 @@ type Work struct {
 	PublishedYear string
 	NDC           string
 	Kana          string // copyright flag
+	CharUsage     string // 文字遣い種別 (e.g. 新字新仮名)
 	TextURL       string
 	AuthorID      string
 	LastName      string
 	FirstName     string
+}
+
+func (w *Work) IsNewKana() bool {
+	return strings.Contains(w.CharUsage, "新仮名")
 }
 
 func (w *Work) AuthorName() string {
@@ -92,6 +97,7 @@ func Load(csvPath string) ([]*Author, error) {
 			Subtitle:      rec[4],
 			NDC:           rec[8],
 			Kana:          workCopyright,
+			CharUsage:     rec[9],
 			TextURL:       textURL,
 			AuthorID:      authorID,
 			LastName:      rec[15],
